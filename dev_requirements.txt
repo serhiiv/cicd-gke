@@ -1,0 +1,4 @@
+aiohttp
+fastapi[standard]
+pytest
+pytest-cov

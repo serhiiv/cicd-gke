@@ -1,0 +1,60 @@
+name: rl
+
+services:
+  master:
+    container_name: rl-master
+    image: serhii714/ds:iter3
+    environment:
+      - HEARTBEATS=${HEARTBEATS}
+    ports:
+      - 8000:8000
+    networks:
+      - replicated_log
+    cap_add:
+      - NET_ADMIN
+    command: ['uvicorn', 'master:app', '--host=0.0.0.0', '--port=8000', '--log-config=log_conf.yaml']
+
+  # slave:
+  #   scale: 2
+  #   image: serhii714/ds:iter1
+    # environment:
+    #   - HEARTBEATS=${HEARTBEATS}
+  #   ports:
+  #     - 8001-8999:8000
+  #   networks:
+  #     - replicated_log
+  #   cap_add:
+  #     - NET_ADMIN
+  #   volumes:
+  #     - ./app:/app
+  #   command: ['uvicorn', 'slave:app', '--host=0.0.0.0', '--port=8000', '--log-config=log_conf.yaml']
+
+
+  slave-1:
+    container_name: rl-slave-1
+    image: serhii714/ds:iter3
+    environment:
+      - HEARTBEATS=${HEARTBEATS}
+    ports:
+      - 8001:8000
+    networks:
+      - replicated_log
+    cap_add:
+      - NET_ADMIN
+    command: ['uvicorn', 'slave:app', '--host=0.0.0.0', '--port=8000', '--log-config=log_conf.yaml']
+
+  slave-2:
+    container_name: rl-slave-2
+    image: serhii714/ds:iter3
+    environment:
+      - HEARTBEATS=${HEARTBEATS}
+    ports:
+      - 8002:8000
+    networks:
+      - replicated_log
+    cap_add:
+      - NET_ADMIN
+    command: ['uvicorn', 'slave:app', '--host=0.0.0.0', '--port=8000', '--log-config=log_conf.yaml']
+
+networks:
+  replicated_log:

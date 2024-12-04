@@ -106,8 +106,8 @@ jobs:
       - name: Authenticate to GKE cluster
         uses: google-github-actions/get-gke-credentials@v2
         with:
-          cluster_name: '$GKE_CLUSTER'
-          location: '$GKE_REGION'
+          cluster_name: ${{ vars.GKE_CLUSTER }}
+          location: ${{ vars.GKE_REGION }}
       - 
         name: Check gke-gcloud-auth-plugin
         run: |

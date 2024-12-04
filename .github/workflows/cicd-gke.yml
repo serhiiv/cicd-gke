@@ -119,25 +119,22 @@ jobs:
       - 
         name: Create namespace & set in Kustomize
         run: |
-          kubectl delete ns python-app-blue --wait=true
-          kubectl delete ns python-app-green --wait=true
-
-          namespacePresentBlue=`kubectl get ns | grep python-app-blue | wc -l`
-          namespacePresentGreen=`kubectl get ns | grep python-app-green | wc -l`
+          namespacePresentBlue=`kubectl get ns | grep cicd-gke-blue | wc -l`
+          namespacePresentGreen=`kubectl get ns | grep cicd-gke-green | wc -l`
           if [ $namespacePresentBlue -eq 0 ]
           then
-              kubectl create ns python-app-blue
+              kubectl create ns cicd-gke-blue
               cd k8s
-              kustomize edit set namespace python-app-blue
-              echo "NEW_NAMESPACE=python-app-blue" >> $GITHUB_ENV
-              echo "OLD_NAMESPACE=python-app-green" >> $GITHUB_ENV
+              kustomize edit set namespace cicd-gke-blue
+              echo "NEW_NAMESPACE=cicd-gke-blue" >> $GITHUB_ENV
+              echo "OLD_NAMESPACE=cicd-gke-green" >> $GITHUB_ENV
           elif [ $namespacePresentGreen -eq 0 ]
           then
-              kubectl create ns python-app-green
+              kubectl create ns cicd-gke-green
               cd k8s
-              kustomize edit set namespace python-app-green
-              echo "NEW_NAMESPACE=python-app-green" >> $GITHUB_ENV
-              echo "OLD_NAMESPACE=python-app-blue" >> $GITHUB_ENV
+              kustomize edit set namespace cicd-gke-green
+              echo "NEW_NAMESPACE=cicd-gke-green" >> $GITHUB_ENV
+              echo "OLD_NAMESPACE=cicd-gke-blue" >> $GITHUB_ENV
           else
               echo "Both Blue and Green namespaces are present! Exiting"
               exit 1

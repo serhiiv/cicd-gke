@@ -74,7 +74,7 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        file: ./Dockerfile
+        file: Dockerfile
         push: true
         tags: ${{ vars.DOCKERHUB_USERNAME }}/cicd-gke:${{ github.sha }}, ${{ vars.DOCKERHUB_USERNAME }}/cicd-gke:latest
 

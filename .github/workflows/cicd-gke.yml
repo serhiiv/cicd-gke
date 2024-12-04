@@ -89,14 +89,10 @@ jobs:
       GKE_CLUSTER: ${{ vars.GKE_CLUSTER }}
 
     steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v4
-
       - 
         name: Setup Kustomize
         uses: imranismail/setup-kustomize@v2
-      - # Alternative option - authentication via credentials json
+      - 
         name: Authenticate to Google Cloud
         uses: 'google-github-actions/auth@v2'
         with:

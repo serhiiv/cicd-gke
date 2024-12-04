@@ -119,6 +119,9 @@ jobs:
       - 
         name: Create namespace & set in Kustomize
         run: |
+          kubectl delete ns python-app-blue --wait=true
+          kubectl delete ns python-app-green --wait=true
+
           namespacePresentBlue=`kubectl get ns | grep python-app-blue | wc -l`
           namespacePresentGreen=`kubectl get ns | grep python-app-green | wc -l`
           if [ $namespacePresentBlue -eq 0 ]
@@ -139,7 +142,6 @@ jobs:
               echo "Both Blue and Green namespaces are present! Exiting"
               exit 1
           fi
-
       - 
         name: Update Kubernetes resources
         env:
@@ -160,14 +162,14 @@ jobs:
 #     #  run: |
 #     #    kubectl apply -k k8s/
 
-#     # REMOVE OLD DEPLOYMENT!!
-#     - name: Remove old namespace
-#       run: |
-#         namespacePresentOld=`kubectl get ns | grep ${{ env.OLD_NAMESPACE }} | wc -l`
-#         if [ $namespacePresentOld -eq 1 ]
-#         then
-#           kubectl delete ns ${{ env.OLD_NAMESPACE }} --wait=true
-#         fi
+      - 
+        name: REMOVE OLD DEPLOYMENT!!
+        run: |
+          namespacePresentOld=`kubectl get ns | grep ${{ env.OLD_NAMESPACE }} | wc -l`
+          if [ $namespacePresentOld -eq 1 ]
+          then
+            kubectl delete ns ${{ env.OLD_NAMESPACE }} --wait=true
+          fi
  
 #     - name: Commit files
 #       run: |

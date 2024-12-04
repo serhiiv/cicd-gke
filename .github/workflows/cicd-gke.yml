@@ -132,13 +132,14 @@ jobs:
               exit 1
           fi
 
-#     - name: Update Kubernetes resources
-#       env:
-#         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-#       run: |
-#        cd k8s
-#        kustomize edit set image hello-gitops=$DOCKER_USERNAME/hello-gitops:$GITHUB_SHA
-#        cat kustomization.yaml
+      - 
+        name: Update Kubernetes resources
+        env:
+          DOCKER_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+        run: |
+          cd k8s
+          kustomize edit set image hello-gitops=$DOCKER_USERNAME/cicd-gke:$GITHUB_SHA
+          cat kustomization.yaml
     
 #     - name: Deploy updated Kubernetes resources
 #       run: |

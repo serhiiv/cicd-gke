@@ -146,7 +146,9 @@ jobs:
           DOCKER_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
         run: |
           cd k8s
-          kustomize edit set image hello-gitops=$DOCKER_USERNAME/cicd-gke:$GITHUB_SHA
+          kustomize edit set image cicd-gke=${{ vars.DOCKERHUB_USERNAME }}/cicd-gke:${{ github.sha }}
+          kustomize edit set label app:cicd-gke
+          kustomize edit set namespace cicd-gke
           cat kustomization.yaml
     
 #     - name: Deploy updated Kubernetes resources

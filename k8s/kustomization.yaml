@@ -8,3 +8,7 @@ resources:
 namespace: cicd-gke
 commonLabels:
   app: cicd-gke
+images:
+- name: cicd-gke
+  newName: cicd-gke
+  newTag: cicd-gke

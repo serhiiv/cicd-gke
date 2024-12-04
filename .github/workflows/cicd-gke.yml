@@ -115,7 +115,7 @@ jobs:
       - 
         name: Get the GKE credentials so we can deploy to the cluster
         run: |
-          gcloud container clusters get-credentials '$GKE_CLUSTER' --region '$GKE_REGION'
+          gcloud container clusters get-credentials ${{ vars.GKE_CLUSTER }} --region ${{ vars.GKE_REGION }}
       - 
         name: Create namespace & set in Kustomize
         run: |

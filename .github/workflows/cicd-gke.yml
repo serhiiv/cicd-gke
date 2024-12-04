@@ -101,6 +101,10 @@ jobs:
         name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
       - 
+        # Check gke-gcloud-auth-plugin
+        run: |
+          gke-gcloud-auth-plugin --version
+      - 
         name: Get the GKE credentials so we can deploy to the cluster
         run: |
           gcloud container clusters get-credentials "$GKE_CLUSTER" --region "$GKE_REGION"

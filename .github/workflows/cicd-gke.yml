@@ -74,7 +74,7 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         # context: .
-        file: ./Dockerfile
+        # file: ./Dockerfile
         push: true
         tags: ${{ vars.DOCKERHUB_USERNAME }}/cicd-gke:${{ github.sha }}, ${{ vars.DOCKERHUB_USERNAME }}/cicd-gke:latest
 
@@ -98,7 +98,7 @@ jobs:
         uses: imranismail/setup-kustomize@v2
       - # Alternative option - authentication via credentials json
         name: Authenticate to Google Cloud
-        uses: 'google-github-actions/auth@v0'
+        uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
       - 

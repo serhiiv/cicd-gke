@@ -128,70 +128,56 @@ jobs:
       - 
         name: Create namespace & set in Kustomize
         run: |
-          pwd
-
-          ls -al 
-          cd k8s/
-
-#       - 
-#         name: Create namespace & set in Kustomize
-#         run: |
-#           namespacePresentBlue=`kubectl get ns | grep cicd-gke-blue | wc -l`
-#           namespacePresentGreen=`kubectl get ns | grep cicd-gke-green | wc -l`
-#           if [ $namespacePresentBlue -eq 0 ]
-#           then
-#               kubectl create ns cicd-gke-blue
-#               cd k8s
-#               kustomize edit set namespace cicd-gke-blue
-#               echo "NEW_NAMESPACE=cicd-gke-blue" >> $GITHUB_ENV
-#               echo "OLD_NAMESPACE=cicd-gke-green" >> $GITHUB_ENV
-#           elif [ $namespacePresentGreen -eq 0 ]
-#           then
-#               kubectl create ns cicd-gke-green
-#               cd k8s
-#               kustomize edit set namespace cicd-gke-green
-#               echo "NEW_NAMESPACE=cicd-gke-green" >> $GITHUB_ENV
-#               echo "OLD_NAMESPACE=cicd-gke-blue" >> $GITHUB_ENV
-#           else
-#               echo "Both Blue and Green namespaces are present! Exiting"
-#               exit 1
-#           fi
-#       - 
-#         name: Update Kubernetes resources
-#         env:
-#           DOCKER_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
-#         run: |
-#           cd k8s
-#           kustomize edit set image cicd-gke=${{ vars.DOCKERHUB_USERNAME }}/cicd-gke:${{ github.sha }}
-#           kustomize edit set label app:cicd-gke
-#           kustomize edit set namespace cicd-gke
-#           cat kustomization.yaml
-    
-# #     - name: Deploy updated Kubernetes resources
-# #       run: |
-# #         kubectl apply -k k8s/ 
-   
-# #     # DO SOME CHECKS HERE BEFORE COMMIT
-# #     #- name: Deploy updated Kubernetes resources
-# #     #  run: |
-# #     #    kubectl apply -k k8s/
-
-#       - 
-#         name: REMOVE OLD DEPLOYMENT!!
-#         run: |
-#           namespacePresentOld=`kubectl get ns | grep ${{ env.OLD_NAMESPACE }} | wc -l`
-#           if [ $namespacePresentOld -eq 1 ]
-#           then
-#             kubectl delete ns ${{ env.OLD_NAMESPACE }} --wait=true
-#           fi
- 
-# #     - name: Commit files
-# #       run: |
-# #         git config --local user.email "action@github.com"
-# #         git config --local user.name "GitHub Action"
-# #         git commit -am "Bump docker tag"
-        
-# #     - name: Push changes
-# #       uses: ad-m/github-push-action@master
-# #       with:
-# #         github_token: ${{ secrets.GITHUB_TOKEN }}       
+          namespacePresentBlue=`kubectl get ns | grep cicd-gke-blue | wc -l`
+          namespacePresentGreen=`kubectl get ns | grep cicd-gke-green | wc -l`
+          if [ $namespacePresentBlue -eq 0 ]
+          then
+              kubectl create ns cicd-gke-blue
+              cd k8s
+              kustomize edit set namespace cicd-gke-blue
+              echo "NEW_NAMESPACE=cicd-gke-blue" >> $GITHUB_ENV
+              echo "OLD_NAMESPACE=cicd-gke-green" >> $GITHUB_ENV
+          elif [ $namespacePresentGreen -eq 0 ]
+          then
+              kubectl create ns cicd-gke-green
+              cd k8s
+              kustomize edit set namespace cicd-gke-green
+              echo "NEW_NAMESPACE=cicd-gke-green" >> $GITHUB_ENV
+              echo "OLD_NAMESPACE=cicd-gke-blue" >> $GITHUB_ENV
+          else
+              echo "Both Blue and Green namespaces are present! Exiting"
+              exit 1
+          fi
+      - 
+        name: Update Kubernetes resources
+        env:
+          DOCKER_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+        run: |
+          cd k8s
+          kustomize edit set image cicd-gke=${{ vars.DOCKERHUB_USERNAME }}/cicd-gke:${{ github.sha }}
+          kustomize edit set label app:cicd-gke
+          kustomize edit set namespace cicd-gke
+          cat kustomization.yaml
+#     - 
+#       name: Deploy updated Kubernetes resources
+#       run: |
+#         kubectl apply -k k8s/ 
+      - 
+        name: REMOVE OLD DEPLOYMENT!!
+        run: |
+          namespacePresentOld=`kubectl get ns | grep ${{ env.OLD_NAMESPACE }} | wc -l`
+          if [ $namespacePresentOld -eq 1 ]
+          then
+            kubectl delete ns ${{ env.OLD_NAMESPACE }} --wait=true
+          fi
+      - 
+        name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -am "Bump docker tag"
+      - 
+        name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}       

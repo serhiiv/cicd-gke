@@ -39,7 +39,7 @@ async def beat(session):
     data = {"ip": IP, "delivered": delivered}
     try:
         logger.info(f'= Heartbeats with "{data}"')
-        await session.post('http://rl-master:8000/health', json=data, timeout=HEARTBEATS)
+        await session.post('http://master:8000/health', json=data, timeout=HEARTBEATS)
     except ClientError:
         pass
 

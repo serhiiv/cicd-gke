@@ -11,4 +11,4 @@ commonLabels:
 images:
 - name: cicd-gke
   newName: serhii714/cicd-gke
-  newTag: 6f86ea36c2c7d34d1dbf91fdc7911dc998bae8c1
+  newTag: 6b95faf895fde2456813bf5e453dad30bb600106

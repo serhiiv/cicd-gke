@@ -95,11 +95,6 @@ jobs:
     permissions:
       contents: write
       pull-requests: write 
-      
-    # env:
-    #   PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
-    #   GKE_REGION: ${{ vars.GKE_REGION }}
-    #   GKE_CLUSTER: ${{ vars.GKE_CLUSTER }}
 
     steps:
       - 
@@ -109,69 +104,6 @@ jobs:
       - 
         name: Setup Kustomize
         uses: imranismail/setup-kustomize@v2
-
-      # - 
-      #   name: Authenticate to Google Cloud
-      #   uses: 'google-github-actions/auth@v2'
-      #   with:
-      #     credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-
-      # - 
-      #   name: Set up Cloud SDK
-      #   uses: google-github-actions/setup-gcloud@v2
-      #   with:
-      #     install_components: "gke-gcloud-auth-plugin"
-      
-      # - name: Authenticate to GKE cluster
-      #   uses: google-github-actions/get-gke-credentials@v2
-      #   with:
-      #     cluster_name: ${{ vars.GKE_CLUSTER }}
-      #     location: ${{ vars.GKE_REGION }}
-
-      # - 
-      #   name: Check gke-gcloud-auth-plugin
-      #   run: |
-      #     gke-gcloud-auth-plugin --version
-
-      # - 
-      #   name: Get the GKE credentials so we can deploy to the cluster
-      #   run: |
-      #     gcloud container clusters get-credentials ${{ vars.GKE_CLUSTER }} --region ${{ vars.GKE_REGION }}
-
-      # - 
-      #   name: Create namespace & set in Kustomize
-      #   run: |
-      #     namespacePresentBlue=`kubectl get ns | grep cicd-gke-blue | wc -l`
-      #     namespacePresentGreen=`kubectl get ns | grep cicd-gke-green | wc -l`
-      #     if [ $namespacePresentBlue -eq 0 ]
-      #     then
-      #         kubectl create ns cicd-gke-blue
-      #         cd k8s
-      #         kustomize edit set namespace cicd-gke-blue
-      #         kustomize edit set label app:cicd-gke-blue
-      #         echo "NEW_NAMESPACE=cicd-gke-blue" >> $GITHUB_ENV
-      #         echo "OLD_NAMESPACE=cicd-gke-green" >> $GITHUB_ENV
-      #     elif [ $namespacePresentGreen -eq 0 ] 
-      #     then
-      #         kubectl create ns cicd-gke-green
-      #         cd k8s
-      #         kustomize edit set namespace cicd-gke-green
-      #         kustomize edit set label app:cicd-gke-green
-      #         echo "NEW_NAMESPACE=cicd-gke-green" >> $GITHUB_ENV
-      #         echo "OLD_NAMESPACE=cicd-gke-blue" >> $GITHUB_ENV
-      #     else
-      #         echo "Both Blue and Green namespaces are present! Exiting"
-      #         exit 1
-      #     fi
-
-      # - 
-      #   name: Update Kubernetes resources
-      #   run: |
-      #     cd k8s
-      #     kustomize edit set image cicd-gke=${{ vars.DOCKERHUB_USERNAME }}/cicd-gke:${{ github.sha }}
-      #     cat kustomization.yaml
-
-
       - 
         name: Update Kubernetes resources
         run: |
@@ -180,22 +112,6 @@ jobs:
           kustomize edit set label app:ci-argocd-gke
           kustomize edit set image cicd-gke=${{ vars.DOCKERHUB_USERNAME }}/cicd-gke:${{ github.sha }}
           cat kustomization.yaml
-
-
-      # - 
-      #   name: Deploy updated Kubernetes resources
-      #   run: |
-      #     kubectl apply -k k8s/
-
-      # - 
-      #   name: REMOVE OLD DEPLOYMENT!!
-      #   run: |
-      #     namespacePresentOld=`kubectl get ns | grep ${{ env.OLD_NAMESPACE }} | wc -l`
-      #     if [ $namespacePresentOld -eq 1 ]
-      #     then
-      #       kubectl delete ns ${{ env.OLD_NAMESPACE }} --wait=true
-      #     fi
-
       - 
         name: Commit files
         run: |

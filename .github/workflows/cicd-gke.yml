@@ -91,9 +91,11 @@ jobs:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
-    # permissions:
-    #   contents: write
-    #   pull-requests: write 
+
+    permissions:
+      contents: write
+      pull-requests: write 
+      
     env:
       PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
       GKE_REGION: ${{ vars.GKE_REGION }}

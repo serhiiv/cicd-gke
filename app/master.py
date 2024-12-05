@@ -173,7 +173,7 @@ async def get_health():
 
 @app.post("/health")
 async def post_health(health: Health):
-    ''' Record heartbeat and (if needed) replicate missed messages.
+    ''' Record heartbeat and (if needed) replicate missed messages
     '''
     global slaves
     slaves[health.ip] = {'delivered': health.delivered, 'uptime': time.time()}

@@ -5,10 +5,10 @@ resources:
 - master-service.yaml
 - slave-deployment.yaml
 - slave-service.yaml
-namespace: cicd-gke-green
+namespace: cicd-gke-blue
 commonLabels:
-  app: cicd-gke-green
+  app: cicd-gke-blue
 images:
 - name: cicd-gke
   newName: serhii714/cicd-gke
-  newTag: ffd62fa31ca5d73ce607ffca2153763e975197a9
+  newTag: c6bac0c2c0dcde7d9bcafd96fb59133b9e5271f0

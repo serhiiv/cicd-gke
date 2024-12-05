@@ -7,9 +7,9 @@ on:
   push:
     branches: 
       - 'main'
+  pull_request:
+    branches: 'main'
 
-permissions:
-  contents: read
 
 jobs:
 
@@ -91,17 +91,15 @@ jobs:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
-    # defaults:
-    #   run:
-    #     working-directory: .
-
+    # permissions:
+    #   contents: write
+    #   pull-requests: write 
     env:
       PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
       GKE_REGION: ${{ vars.GKE_REGION }}
       GKE_CLUSTER: ${{ vars.GKE_CLUSTER }}
 
     steps:
-
       - 
         name: Checkout repository
         uses: actions/checkout@v4
